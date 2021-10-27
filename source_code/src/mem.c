@@ -54,15 +54,12 @@ static struct page_table_t *get_page_table(
 	 * field of the row is equal to the index
 	 *
 	 * */
-
 	int i;
 	for (i = 0; i < seg_table->size; i++)
 	{
 		// Enter your code here
 		if (seg_table->table[i].v_index == index)
-		{
 			return seg_table->table[i].pages;
-		}
 	}
 	return NULL;
 }
@@ -182,7 +179,7 @@ addr_t alloc_mem(uint32_t size, struct pcb_t *proc)
 					page_table = proc->seg_table->table[proc->seg_table->size - 1].pages;
 				}
 				page_table->table[page_table->size].v_index = page_index;
-				page_table->table[page_table->size].p_index = i;
+				page_table->table[page_table->size].p_index = i; // location of the allocated page
 				page_table->size++;
 
 				num_page++; // update page index
@@ -237,6 +234,7 @@ int free_mem(addr_t address, struct pcb_t *proc)
 
 		struct page_table_t *page_table = NULL;
 		int j, index_of_page;
+		// find page in seg_table
 		for (j = 0; j < proc->seg_table->size; j++)
 		{
 			if (proc->seg_table->table[j].v_index == seg_index)
@@ -246,6 +244,7 @@ int free_mem(addr_t address, struct pcb_t *proc)
 				break;
 			}
 		}
+		// Remove unused entries in segment table and page tables of the process [proc].
 		if (page_table != NULL)
 		{
 			for (j = 0; j < page_table->size; j++)
