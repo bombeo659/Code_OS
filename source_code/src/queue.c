@@ -10,13 +10,9 @@ int empty(struct queue_t *q)
 void enqueue(struct queue_t *q, struct pcb_t *proc)
 {
 	/* TODO: put a new process to queue [q] */
-	if (q->size < MAX_QUEUE_SIZE)
-	{
-		q->proc[q->size] = proc;
-		q->size += 1;
-	}
-	else
+	if (q->size == MAX_QUEUE_SIZE)
 		return;
+	q->proc[q->size++] = proc;
 }
 
 struct pcb_t *dequeue(struct queue_t *q)
@@ -37,10 +33,8 @@ struct pcb_t *dequeue(struct queue_t *q)
 			index = i;
 		}
 	}
-	// remove pcb found
+	// remove and return pcb found
 	struct pcb_t *pcbReturn = q->proc[index];
-	for (i = index; i < q->size - 1; i++)
-		q->proc[i] = q->proc[i + 1];
-	q->size -= 1;
+	q->proc[index] = q->proc[--q->size];
 	return pcbReturn;
 }
