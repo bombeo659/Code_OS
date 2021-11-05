@@ -36,13 +36,14 @@ static int read(
 }
 
 static int write(
-		struct pcb_t * proc, // Process executing the instruction
-		BYTE data, // Data to be wrttien into memory
-		uint32_t destination, // Index of destination register
-		uint32_t offset) { 	// Destination address =
-					// [destination] + [offset]
+	struct pcb_t *proc,	  // Process executing the instruction
+	BYTE data,			  // Data to be wrttien into memory
+	uint32_t destination, // Index of destination register
+	uint32_t offset)	  // Destination address = [destination] + [offset]
+{
+	// printf("check: %d\n", proc->regs[destination] + offset);
 	return write_mem(proc->regs[destination] + offset, proc, data);
-} 
+}
 
 int run(struct pcb_t * proc) {
 	/* Check if Program Counter point to the proper instruction */

@@ -194,6 +194,9 @@ addr_t alloc_mem(uint32_t size, struct pcb_t *proc)
 		}
 	}
 	pthread_mutex_unlock(&mem_lock);
+	// printf("***PHYSICAL MEMORY AFTER ALLOCATION***\n");
+	// dump();
+	// printf("***------------------------***\n");
 	return ret_mem;
 }
 
@@ -269,6 +272,9 @@ int free_mem(addr_t address, struct pcb_t *proc)
 		proc->bp -= num_pages * PAGE_SIZE;
 
 	pthread_mutex_unlock(&mem_lock);
+	// printf("***PHYSICAL MEMORY AFTER FREE***\n");
+	// dump();
+	// printf("***------------------------***\n");
 	return 1;
 }
 
