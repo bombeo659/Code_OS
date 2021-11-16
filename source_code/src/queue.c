@@ -35,6 +35,7 @@ struct pcb_t *dequeue(struct queue_t *q)
 	}
 	// remove and return pcb found
 	struct pcb_t *pcbReturn = q->proc[index];
-	q->proc[index] = q->proc[--q->size];
+	q->proc[index] = q->proc[q->size-1];
+	q->size --;
 	return pcbReturn;
 }
