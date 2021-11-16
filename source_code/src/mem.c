@@ -194,9 +194,9 @@ addr_t alloc_mem(uint32_t size, struct pcb_t *proc)
 		}
 	}
 	pthread_mutex_unlock(&mem_lock);
-	// printf("***PHYSICAL MEMORY AFTER ALLOCATION***\n");
-	// dump();
-	// printf("***------------------------***\n");
+	 printf("***PHYSICAL MEMORY AFTER ALLOCATION***\n");
+	 dump();
+	 printf("***------------------------***\n");
 	return ret_mem;
 }
 
@@ -214,13 +214,13 @@ int free_mem(addr_t address, struct pcb_t *proc)
 
 	addr_t physical_addr; // physical address to free in memory
 
-	// Find physical page in memory
+	// Find physical_addr page in memory
 	if (!translate(address, &physical_addr, proc))
 		return 0;
 
 	// Clear physical page in memory
 	addr_t p_index = physical_addr >> OFFSET_LEN; // find physical index
-	int num_pages = 0;							  // number of pages
+	int num_pages = 0;				// number of pages
 	int i;
 	for (i = p_index; i != -1; i = _mem_stat[i].next)
 	{
@@ -254,14 +254,16 @@ int free_mem(addr_t address, struct pcb_t *proc)
 			{
 				if (page_table->table[j].v_index == page_index)
 				{
-					page_table->table[j] = page_table->table[--page_table->size];
+					page_table->table[j] = page_table->table[page_table->size-1];
+					page_table->size--;
 					break;
 				}
 			}
 			if (page_table->size == 0)
 			{
 				free(page_table);
-				proc->seg_table->table[index_of_page] = proc->seg_table->table[--proc->seg_table->size];
+				proc->seg_table->table[index_of_page] = proc->seg_table->table[proc->seg_table->size-1];
+				proc->seg_table->size --;
 			}
 		}
 		else
@@ -272,9 +274,9 @@ int free_mem(addr_t address, struct pcb_t *proc)
 		proc->bp -= num_pages * PAGE_SIZE;
 
 	pthread_mutex_unlock(&mem_lock);
-	// printf("***PHYSICAL MEMORY AFTER FREE***\n");
-	// dump();
-	// printf("***------------------------***\n");
+	 printf("***PHYSICAL MEMORY AFTER FREE***\n");
+	 dump();
+	 printf("***------------------------***\n");
 	return 1;
 }
 
